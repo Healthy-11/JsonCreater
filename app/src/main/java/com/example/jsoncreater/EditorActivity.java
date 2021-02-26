@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,12 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.ByteArrayOutputStream;
 
 public class EditorActivity extends AppCompatActivity {
 
@@ -42,6 +38,8 @@ public class EditorActivity extends AppCompatActivity {
     EditText tVCity;
     EditText tVEmail;
     ImageView imageView;
+
+    String encoded;
 
     JSONArray jsonArray = new JSONArray();
 
@@ -110,10 +108,15 @@ public class EditorActivity extends AppCompatActivity {
                     json.put("city", tVCity.getText().toString());
                     json.put("email", tVEmail.getText().toString());
 
+                    if(encoded != null)
+                        json.put("image", encoded);
+
                     jsonArray.put(json);
 
                     editor.putString("JsonArrayPrefs", jsonArray.toString());
                     editor.apply();
+
+                    System.out.println(jsonArray.toString());
 
                 } catch (JSONException e) {
 
@@ -132,6 +135,11 @@ public class EditorActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
         }
     }
