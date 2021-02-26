@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">JsonCreater</string>
+    <string name="open_editor">Open Editor</string>
+    <string name="first_name">First name...</string>
+    <string name="last_name">Last name...</string>
+    <string name="city">City...</string>
+    <string name="email">Email...</string>
+    <string name="done">Done</string>
 </resources>
